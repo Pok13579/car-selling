@@ -3,28 +3,20 @@
 @tailwind utilities;
 
 :root {
+  --background: #ffffff;
   --foreground: #171717;
 }
 
-/* Animation for smooth gradient background moving from left to right */
-@keyframes rgb-gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #000000;
+    --foreground: #ededed;
   }
 }
 
-/* Apply smooth animated gradient background */
 body {
-  background: linear-gradient(90deg, rgb(255, 0, 0), rgb(0, 255, 0), rgb(0, 0, 255), rgb(255, 0, 0));
-  background-size: 300% 300%;
-  animation: rgb-gradient 10s ease infinite;
   color: var(--foreground);
+  background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
 
