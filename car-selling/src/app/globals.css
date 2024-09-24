@@ -24,6 +24,8 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+    cursor: url("./corsur/4.png"), auto;
+    /*cursor: url("./corsur/More Cursors/5.png"), auto;*/
 }
 
 @layer utilities {
