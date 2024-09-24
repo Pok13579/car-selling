@@ -21,9 +21,9 @@ function CarMenu() {
     };
 
     return (
-        <div className="flex">
+        <div className="flex h-screen"> {/* Set full height for the component */}
             {/* Left-side Menu */}
-            <div className="w-1/4 bg-gray-100 p-4">
+            <div className="w-1/2 bg-gray-100 p-4 h-full"> {/* Set height to full */}
                 <ul>
                     <li onClick={() => handleMenuClick('Models')} className="cursor-pointer py-2">Models</li>
                     <li onClick={() => handleMenuClick('Vehicle Purchase')} className="cursor-pointer py-2">Vehicle Purchase</li>
@@ -34,7 +34,7 @@ function CarMenu() {
             </div>
 
             {/* Right-side Display */}
-            <div className="w-3/4 bg-gray-200 p-4">
+            <div className="w-3/4 bg-gray-200 p-4 h-full overflow-y-auto"> {/* Set height to full and enable scrolling */}
                 {selectedMenu === 'Models' && (
                     <div>
                         {carModels.map((car) => (
@@ -78,5 +78,6 @@ function CarMenu() {
         </div>
     );
 }
+
 
 export default CarMenu;

@@ -1,4 +1,4 @@
-"use client"; 
+"use client";
 import { useEffect, useState } from 'react';
 import { checkAuthState } from '../Auth';
 import AuthDialog from '../pages/AuthDialog';
@@ -15,7 +15,7 @@ export default function Home() {
     "https://images-porsche.imgix.net/-/media/E969499404154DB79BAD58EF5CC8CFAB_82BBE0A2462E47C4B1DB34EA0B23B853_CZ25W12IX0010-911-carrera-gts-side?w=1400&q=85&crop=faces%2Centropy%2Cedges&auto=format",
     "https://images-porsche.imgix.net/-/media/5EE5F56AEC67493EB1AA87EAB2721DC0_DDCBAE39F81644E4AAA7B2CA3222DC2E_PA24P5KIX0005-panamera-turbo-e-hybrid-model-intro?w=2560&h=697&q=85&crop=faces%2Centropy%2Cedges&auto=format",
     "https://images-porsche.imgix.net/-/media/E369499404154DB79BAD58EF5CC8CFAB_82BBE0A2462E47C4B1DB34EA0B23B853_CZ25W12IX0010-911-targa-side?w=1400&q=85&crop=faces%2Centropy%2Cedges&auto=format",
-    "https://example.com/path/to/your/new-car-image.jpg" // เพิ่ม URL รูปภาพใหม่ที่นี่
+    "https://example.com/path/to/your/new-car-image.jpg" // Add a new car image URL here
   ];
 
   useEffect(() => {
@@ -78,9 +78,23 @@ export default function Home() {
       <div className="flex">
         {/* Menu Section */}
         {menuVisible && (
-          <aside className="w-1/4 bg-gray-200 shadow-lg p-4">
-            <h3 className="font-bold text-lg mb-2">Menu</h3>
-            <CarMenu />
+          <aside
+            className="fixed inset-0 z-50 bg-gray-800 bg-opacity-75 flex justify-end"
+            style={{ transition: "all 0.3s ease" }}
+          >
+            <div
+              className="w-1/2 bg-white p-6 shadow-lg h-full"
+              style={{ right: menuVisible ? "0" : "-50%", transition: "right 0.3s ease" }}
+            >
+              <button
+                onClick={toggleMenu}
+                className="text-right text-gray-700 font-bold text-xl mb-2"
+              >
+                X
+              </button>
+              <h3 className="font-bold text-lg mb-4">Car Menu</h3>
+              <CarMenu />
+            </div>
           </aside>
         )}
 
