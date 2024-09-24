@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from 'react';
 import { checkAuthState } from '../Auth';
 import AuthDialog from '../pages/AuthDialog';
@@ -65,12 +66,12 @@ export default function Home() {
             >
               Menu
             </button>
-            {!user && (
+            
               <AuthDialog 
                 onLogin={setUser} 
                 customClass="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full transition duration-300" 
               />
-            )}
+            
           </div>
         </nav>
       </header>
