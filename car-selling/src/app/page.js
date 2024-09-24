@@ -9,6 +9,7 @@ export default function Home() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [menuVisible, setMenuVisible] = useState(false); // State to control menu visibility
 
   const carImages = [
     "https://images-porsche.imgix.net/-/media/E969499404154DB79BAD58EF5CC8CFAB_82BBE0A2462E47C4B1DB34EA0B23B853_CZ25W12IX0010-911-carrera-gts-side?w=1400&q=85&crop=faces%2Centropy%2Cedges&auto=format",
@@ -39,6 +40,10 @@ export default function Home() {
     );
   };
 
+  const toggleMenu = () => {
+    setMenuVisible(!menuVisible); // Toggle menu visibility
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -54,9 +59,12 @@ export default function Home() {
         <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
           <div className="text-2xl font-extrabold text-blue-600 tracking-wide">PORSCHE</div>
           <div className="flex items-center">
-            <div className="text-lg font-medium text-gray-600 hover:text-blue-600 transition duration-300 mr-6 cursor-pointer">
+            <button 
+              onClick={toggleMenu} 
+              className="text-lg font-medium text-gray-600 hover:text-blue-600 transition duration-300 mr-6"
+            >
               Menu
-            </div>
+            </button>
             {!user && (
               <AuthDialog 
                 onLogin={setUser} 
@@ -67,61 +75,66 @@ export default function Home() {
         </nav>
       </header>
 
-      {/* Main Section */}
-      <main className="flex-grow">
-        <section className="relative">
-          <div 
-            className="relative w-full h-[70vh] bg-cover bg-center"
-            style={{ 
-              backgroundImage: `url(${carImages[currentImageIndex]})`,
-              backgroundSize: "contain",
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "center",
-            }}
-          >
-            <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
-              <div className="text-center text-white space-y-4 animate-fade-in">
-                {/* Content here */}
+      <div className="flex">
+        {/* Menu Section */}
+        {menuVisible && (
+          <aside className="w-1/4 bg-gray-200 shadow-lg p-4">
+            <h3 className="font-bold text-lg mb-2">Menu</h3>
+            <CarMenu />
+          </aside>
+        )}
+
+        {/* Main Section */}
+        <main className="flex-grow">
+          <section className="relative">
+            <div 
+              className="relative w-full h-[70vh] bg-cover bg-center"
+              style={{ 
+                backgroundImage: `url(${carImages[currentImageIndex]})`,
+                backgroundSize: "contain",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center",
+              }}
+            >
+              <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+                <div className="text-center text-white space-y-4 animate-fade-in">
+                  {/* Content here */}
+                </div>
+              </div>
+              {/* Left and Right Navigation Buttons */}
+              <div className="absolute inset-y-0 left-4 flex items-center">
+                <button 
+                  onClick={handlePreviousImage} 
+                  className="bg-white bg-opacity-70 hover:bg-opacity-100 transition-all text-gray-800 p-3 rounded-full shadow-lg"
+                >
+                  {"<"}
+                </button>
+              </div>
+              <div className="absolute inset-y-0 right-4 flex items-center">
+                <button 
+                  onClick={handleNextImage} 
+                  className="bg-white bg-opacity-70 hover:bg-opacity-100 transition-all text-gray-800 p-3 rounded-full shadow-lg"
+                >
+                  {">"}
+                </button>
               </div>
             </div>
-            {/* Left and Right Navigation Buttons */}
-            <div className="absolute inset-y-0 left-4 flex items-center">
-              <button 
-                onClick={handlePreviousImage} 
-                className="bg-white bg-opacity-70 hover:bg-opacity-100 transition-all text-gray-800 p-3 rounded-full shadow-lg"
-              >
-                {"<"}
-              </button>
-            </div>
-            <div className="absolute inset-y-0 right-4 flex items-center">
-              <button 
-                onClick={handleNextImage} 
-                className="bg-white bg-opacity-70 hover:bg-opacity-100 transition-all text-gray-800 p-3 rounded-full shadow-lg"
-              >
-                {">"}
-              </button>
-            </div>
-          </div>
-        </section>
+          </section>
 
-        {/* Task Section */}
-        <section className="container mx-auto px-6 py-12 text-center">
-          <h2 className="text-4xl font-bold mb-6 text-gray-800">Manage Your Tasks with Ease</h2>
-          <p className="text-lg text-gray-600 mb-10">Stay organized, focused, and in control</p>
-          {user ? (
-            <TodoItem user={user} />
-          ) : (
-            <div>
-              <p className="text-lg text-gray-600">Please sign in to manage your tasks.</p>
-            </div>
-          )}
-        </section>
-
-        {/* Include CarMenu here */}
-        <section className="container mx-auto px-6 py-12">
-          <CarMenu />
-        </section>
-      </main>
+          {/* Task Section */}
+          <section className="container mx-auto px-6 py-12 text-center">
+            <h2 className="text-4xl font-bold mb-6 text-gray-800">Manage Your Tasks with Ease</h2>
+            <p className="text-lg text-gray-600 mb-10">Stay organized, focused, and in control</p>
+            {user ? (
+              <TodoItem user={user} />
+            ) : (
+              <div>
+                <p className="text-lg text-gray-600">Please sign in to manage your tasks.</p>
+              </div>
+            )}
+          </section>
+        </main>
+      </div>
 
       {/* Footer */}
       <footer className="bg-blue-600 py-6">
