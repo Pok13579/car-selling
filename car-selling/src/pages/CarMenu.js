@@ -55,8 +55,20 @@ function CarMenu() {
                     </div>
                 )}
 
-                {selectedMenu && selectedMenu !== 'Models' && (
-                    <div className="text-xl">You have selected: {selectedMenu}</div>
+                {selectedMenu === 'Vehicle Purchase' && (
+                    <div className="text-xl">รายละเอียดการซื้อรถยนต์</div>
+                )}
+
+                {selectedMenu === 'Services' && (
+                    <div className="text-xl">บริการต่าง ๆ</div>
+                )}
+
+                {selectedMenu === 'Experience' && (
+                    <div className="text-xl">ประสบการณ์การขับขี่</div>
+                )}
+
+                {selectedMenu === 'Find a Dealer' && (
+                    <div className="text-xl">ค้นหาตัวแทนจำหน่าย</div>
                 )}
 
                 {!selectedMenu && (
