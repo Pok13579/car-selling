@@ -3,11 +3,20 @@ import { useEffect, useState } from 'react';
 import { checkAuthState } from '../Auth';
 import AuthDialog from '../pages/AuthDialog';
 import TodoItem from '../pages/TodoItems';
-import CarMenu from '../pages/CarMenu'; // Import CarMenu here
+import CarMenu from '../pages/CarMenu';
 
 export default function Home() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [imageIndex, setImageIndex] = useState(0); // State to track the current image index
+
+  // Array of car image URLs
+  const carImages = [
+    "https://images-porsche.imgix.net/-/media/E969499404154DB79BAD58EF5CC8CFAB_82BBE0A2462E47C4B1DB34EA0B23B853_CZ25W12IX0010-911-carrera-gts-side?w=1400&q=85&crop=faces%2Centropy%2Cedges&auto=format",
+    "https://images-porsche.imgix.net/-/media/E469499404154DB79BAD58EF5CC8CFAB_82BBE0A2462E47C4B1DB34EA0B23B853_CZ25W12IX0010-911-turbo-s-side?w=1400&q=85&crop=faces%2Centropy%2Cedges&auto=format",
+    "https://images-porsche.imgix.net/-/media/E369499404154DB79BAD58EF5CC8CFAB_82BBE0A2462E47C4B1DB34EA0B23B853_CZ25W12IX0010-911-targa-side?w=1400&q=85&crop=faces%2Centropy%2Cedges&auto=format"
+    // Add more URLs as needed
+  ];
 
   useEffect(() => {
     checkAuthState()
@@ -20,6 +29,14 @@ export default function Home() {
         setLoading(false);
       });
   }, []);
+
+  const handleNextImage = () => {
+    setImageIndex((prevIndex) => (prevIndex + 1) % carImages.length);
+  };
+
+  const handlePrevImage = () => {
+    setImageIndex((prevIndex) => (prevIndex - 1 + carImages.length) % carImages.length);
+  };
 
   if (loading) {
     return (
@@ -55,7 +72,7 @@ export default function Home() {
           <div 
             className="relative w-full h-[70vh] bg-cover bg-center"
             style={{ 
-              backgroundImage: "url('https://images-porsche.imgix.net/-/media/E969499404154DB79BAD58EF5CC8CFAB_82BBE0A2462E47C4B1DB34EA0B23B853_CZ25W12IX0010-911-carrera-gts-side?w=1400&q=85&crop=faces%2Centropy%2Cedges&auto=format')",
+              backgroundImage: `url('${carImages[imageIndex]}')`, // Use the current image from the state
               backgroundSize: "contain",
               backgroundRepeat: "no-repeat",
               backgroundPosition: "center",
@@ -68,12 +85,18 @@ export default function Home() {
             </div>
             {/* Left and Right Navigation Buttons */}
             <div className="absolute inset-y-0 left-4 flex items-center">
-              <button className="bg-white bg-opacity-70 hover:bg-opacity-100 transition-all text-gray-800 p-3 rounded-full shadow-lg">
+              <button 
+                className="bg-white bg-opacity-70 hover:bg-opacity-100 transition-all text-gray-800 p-3 rounded-full shadow-lg" 
+                onClick={handlePrevImage} // Handle left button click
+              >
                 {"<"}
               </button>
             </div>
             <div className="absolute inset-y-0 right-4 flex items-center">
-              <button className="bg-white bg-opacity-70 hover:bg-opacity-100 transition-all text-gray-800 p-3 rounded-full shadow-lg">
+              <button 
+                className="bg-white bg-opacity-70 hover:bg-opacity-100 transition-all text-gray-800 p-3 rounded-full shadow-lg" 
+                onClick={handleNextImage} // Handle right button click
+              >
                 {">"}
               </button>
             </div>
