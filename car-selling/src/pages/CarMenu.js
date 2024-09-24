@@ -4,12 +4,12 @@ import React, { useState } from 'react';
 
 // Mock data for car models
 const carModels = [
-    { name: '718', imageUrl: 'https://example.com/718.png', fuel: ['Gasoline'] },
-    { name: '911', imageUrl: 'https://example.com/911.png', fuel: ['Gasoline'] },
-    { name: 'Taycan', imageUrl: 'https://example.com/taycan.png', fuel: ['Electro'] },
-    { name: 'Panamera', imageUrl: 'https://example.com/panamera.png', fuel: ['Hybrid', 'Gasoline'] },
-    { name: 'Macan', imageUrl: 'https://example.com/macan.png', fuel: ['Electro', 'Gasoline'] },
-    { name: 'Cayenne', imageUrl: 'https://example.com/cayenne.png', fuel: ['Hybrid', 'Gasoline'] },
+    { name: '718', imageUrl: 'https://files.porsche.com/filestore/image/multimedia/none/982-718-cayman-gt4rs-modelimage-sideshot/model/ca8f53c1-f3b7-11ed-8103-005056bbdc38/porsche-model.png', fuel: ['Gasoline'] },
+    { name: '911', imageUrl: 'https://images-porsche.imgix.net/-/media/E969499404154DB79BAD58EF5CC8CFAB_82BBE0A2462E47C4B1DB34EA0B23B853_CZ25W12IX0010-911-carrera-gts-side?w=2560&h=697&q=45&crop=faces%2Centropy%2Cedges&auto=format', fuel: ['Gasoline'] },
+    { name: 'Taycan', imageUrl: 'https://images-porsche.imgix.net/-/media/329E707A3234485BBE98485116865780_E8DD4C47C7F14D41B61C1AE76B59FC1A_TA24Q3EIX0010-taycan-turbo-s-side?w=2560&h=697&q=45&crop=faces%2Centropy%2Cedges&auto=format', fuel: ['Electro'] },
+    { name: 'Panamera', imageUrl: 'https://images-porsche.imgix.net/-/media/59689B43ECDE4E05ABEB83FBDD064823_933AEC68E35141DD89A00A0932C25DDE_PA24P5NIX0006-panamera-turbo-s-e-hybrid-side?w=2560&h=697&q=45&crop=faces%2Centropy%2Cedges&auto=format', fuel: ['Hybrid', 'Gasoline'] },
+    { name: 'Macan', imageUrl: 'https://images-porsche.imgix.net/-/media/6706E68927CC491AA3BABF9D186D753A_F204C069B3764429AD5DD23D3F5646F5_macan-turbo-side?w=2560&h=811&q=45&crop=faces%2Centropy%2Cedges&auto=format', fuel: ['Electro', 'Gasoline'] },
+    { name: 'Cayenne', imageUrl: 'https://files.porsche.com/filestore/image/multimedia/none/e3-2nd-cayenne-coupe-modelexplorer-sideshot/normal/923da18f-8859-11ee-810c-005056bbdc38;sS;twebp065/porsche-normal.webp', fuel: ['Hybrid', 'Gasoline'] },
 ];
 
 function CarMenu() {
@@ -34,7 +34,7 @@ function CarMenu() {
             </div>
 
             {/* Right-side Display */}
-            <div className="w-3/4 bg-gray-50 p-4">
+            <div className="w-3/4 bg-gray-200 p-4">
                 {selectedMenu === 'Models' && (
                     <div>
                         {carModels.map((car) => (
