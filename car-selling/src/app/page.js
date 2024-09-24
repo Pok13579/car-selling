@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from 'react';
 import { checkAuthState } from '../Auth';
 import AuthDialog from '../pages/AuthDialog';
