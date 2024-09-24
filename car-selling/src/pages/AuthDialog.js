@@ -90,10 +90,8 @@ return (
 return (
        <>
 
-       // RETURN STATEMENT
-       
-       
-// RETURN STATEMENT (PART 1/3)
+        {/*RETURN STATEMENT
+       RETURN STATEMENT (PART 1/3)*/}
 
 <button onClick={() => setIsOpen(true)}
     className={customClass || "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full transition duration-300"}>
