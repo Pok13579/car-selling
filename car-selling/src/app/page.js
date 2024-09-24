@@ -3,19 +3,18 @@ import { useEffect, useState } from 'react';
 import { checkAuthState } from '../Auth';
 import AuthDialog from '../pages/AuthDialog';
 import TodoItem from '../pages/TodoItems';
-import CarMenu from '../pages/CarMenu';
+import CarMenu from '../pages/CarMenu'; // Import CarMenu here
 
 export default function Home() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [imageIndex, setImageIndex] = useState(0); // State to track the current image index
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // Array of car image URLs
   const carImages = [
     "https://images-porsche.imgix.net/-/media/E969499404154DB79BAD58EF5CC8CFAB_82BBE0A2462E47C4B1DB34EA0B23B853_CZ25W12IX0010-911-carrera-gts-side?w=1400&q=85&crop=faces%2Centropy%2Cedges&auto=format",
-    "https://images-porsche.imgix.net/-/media/E469499404154DB79BAD58EF5CC8CFAB_82BBE0A2462E47C4B1DB34EA0B23B853_CZ25W12IX0010-911-turbo-s-side?w=1400&q=85&crop=faces%2Centropy%2Cedges&auto=format",
-    "https://images-porsche.imgix.net/-/media/E369499404154DB79BAD58EF5CC8CFAB_82BBE0A2462E47C4B1DB34EA0B23B853_CZ25W12IX0010-911-targa-side?w=1400&q=85&crop=faces%2Centropy%2Cedges&auto=format"
-    // Add more URLs as needed
+    "https://images-porsche.imgix.net/-/media/5EE5F56AEC67493EB1AA87EAB2721DC0_DDCBAE39F81644E4AAA7B2CA3222DC2E_PA24P5KIX0005-panamera-turbo-e-hybrid-model-intro?w=2560&h=697&q=85&crop=faces%2Centropy%2Cedges&auto=format",
+    "https://images-porsche.imgix.net/-/media/E369499404154DB79BAD58EF5CC8CFAB_82BBE0A2462E47C4B1DB34EA0B23B853_CZ25W12IX0010-911-targa-side?w=1400&q=85&crop=faces%2Centropy%2Cedges&auto=format",
+    "https://example.com/path/to/your/new-car-image.jpg" // เพิ่ม URL รูปภาพใหม่ที่นี่
   ];
 
   useEffect(() => {
@@ -31,11 +30,13 @@ export default function Home() {
   }, []);
 
   const handleNextImage = () => {
-    setImageIndex((prevIndex) => (prevIndex + 1) % carImages.length);
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % carImages.length);
   };
 
-  const handlePrevImage = () => {
-    setImageIndex((prevIndex) => (prevIndex - 1 + carImages.length) % carImages.length);
+  const handlePreviousImage = () => {
+    setCurrentImageIndex((prevIndex) => 
+      (prevIndex - 1 + carImages.length) % carImages.length
+    );
   };
 
   if (loading) {
@@ -72,7 +73,7 @@ export default function Home() {
           <div 
             className="relative w-full h-[70vh] bg-cover bg-center"
             style={{ 
-              backgroundImage: `url('${carImages[imageIndex]}')`, // Use the current image from the state
+              backgroundImage: `url(${carImages[currentImageIndex]})`,
               backgroundSize: "contain",
               backgroundRepeat: "no-repeat",
               backgroundPosition: "center",
@@ -86,16 +87,16 @@ export default function Home() {
             {/* Left and Right Navigation Buttons */}
             <div className="absolute inset-y-0 left-4 flex items-center">
               <button 
-                className="bg-white bg-opacity-70 hover:bg-opacity-100 transition-all text-gray-800 p-3 rounded-full shadow-lg" 
-                onClick={handlePrevImage} // Handle left button click
+                onClick={handlePreviousImage} 
+                className="bg-white bg-opacity-70 hover:bg-opacity-100 transition-all text-gray-800 p-3 rounded-full shadow-lg"
               >
                 {"<"}
               </button>
             </div>
             <div className="absolute inset-y-0 right-4 flex items-center">
               <button 
-                className="bg-white bg-opacity-70 hover:bg-opacity-100 transition-all text-gray-800 p-3 rounded-full shadow-lg" 
-                onClick={handleNextImage} // Handle right button click
+                onClick={handleNextImage} 
+                className="bg-white bg-opacity-70 hover:bg-opacity-100 transition-all text-gray-800 p-3 rounded-full shadow-lg"
               >
                 {">"}
               </button>
