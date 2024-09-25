@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 export default function CarModels() {
     // Car data with image URLs
     const carData = [
-        {
+        {   
             id: 1,
             name: '718',
             price: 'THB 6,190,000',
