@@ -23,7 +23,7 @@ function CarMenu() {
     return (
         <div className="flex h-screen"> {/* Set full height for the component */}
             {/* Left-side Menu */}
-            <div className="w-1/2 bg-gray-100 p-4 h-full"> {/* Set height to full */}
+            <div className="w-1/74 bg-gray-100 p-4 h-full text-stone-600"> {/* Set height to full */}
                 <ul>
                     <li onClick={() => handleMenuClick('Models')} className="cursor-pointer py-2">Models</li>
                     <li onClick={() => handleMenuClick('Vehicle Purchase')} className="cursor-pointer py-2">Vehicle Purchase</li>
@@ -38,10 +38,17 @@ function CarMenu() {
                 {selectedMenu === 'Models' && (
                     <div>
                         {carModels.map((car) => (
-                            <div key={car.name} className="flex items-center mb-6">
-                                <img src={car.imageUrl} alt={car.name} className="w-32 h-auto mr-4" />
+                            <div
+                                key={car.name}
+                                className="flex items-center mb-6 text-neutral-700 transition-all hover:border hover:border-white hover:shadow-lg rounded-lg p-6 hover:bg-white"
+                            >
+                                <img 
+                                    src={car.imageUrl} 
+                                    alt={car.name} 
+                                    className="w-32 h-auto mr-4 transition-transform duration-300 hover:translate-x-2" 
+                                />
                                 <div>
-                                    <h3 className="text-xl font-bold">{car.name}</h3>
+                                    <h3 className="text-xl font-bold text-neutral-700 ">{car.name}</h3>
                                     <div className="flex space-x-2">
                                         {car.fuel.map((fuelType) => (
                                             <span key={fuelType} className="px-2 py-1 bg-gray-200 rounded">
@@ -78,6 +85,5 @@ function CarMenu() {
         </div>
     );
 }
-
 
 export default CarMenu;
