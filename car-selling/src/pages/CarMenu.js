@@ -1,6 +1,7 @@
-"use client"; // ทำให้คอมโพเนนต์นี้เป็น Client Component
+"use client"; // Make this a client component
 
 import React, { useState } from 'react';
+import { FaChevronRight } from 'react-icons/fa'; // Import the chevron icon
 
 // Mock data for car models
 const carModels = [
@@ -13,7 +14,7 @@ const carModels = [
 ];
 
 function CarMenu() {
-    const [selectedMenu, setSelectedMenu] = useState(null);
+    const [selectedMenu, setSelectedMenu] = useState('Models'); // ตั้งค่าเริ่มต้นเป็น 'Models'
 
     // Function to handle menu click
     const handleMenuClick = (menu) => {
@@ -23,41 +24,50 @@ function CarMenu() {
     return (
         <div className="flex h-screen"> {/* Set full height for the component */}
             {/* Left-side Menu */}
-            <div className="w-1/74 bg-gray-100 p-4 h-full text-stone-600"> {/* Set height to full */}
+            <div className="w-2/6 bg-gray-100 p-4 h-full text-stone-600">
                 <ul>
-                    <li onClick={() => handleMenuClick('Models')} className="cursor-pointer py-2">Models</li>
-                    <li onClick={() => handleMenuClick('Vehicle Purchase')} className="cursor-pointer py-2">Vehicle Purchase</li>
-                    <li onClick={() => handleMenuClick('Services')} className="cursor-pointer py-2">Services</li>
-                    <li onClick={() => handleMenuClick('Experience')} className="cursor-pointer py-2">Experience</li>
-                    <li onClick={() => handleMenuClick('Find a Dealer')} className="cursor-pointer py-2">Find a Dealer</li>
+                    {['Models', 'Vehicle Purchase', 'Services', 'Experience', 'Find a Dealer'].map((menu) => (
+                        <li
+                            key={menu}
+                            onClick={() => handleMenuClick(menu)}
+                            className={`cursor-pointer flex items-center justify-between py-4 pl-6 pr-4 mb-4 rounded-lg transition-colors duration-200 ${selectedMenu === menu
+                                    ? 'bg-gray-300 text-black font-bold' // Add font-bold here
+                                    : 'hover:bg-gray-300 hover:text-black font-semibold' // Add font-bold here
+                                }`}
+                        >
+                            {menu}
+                            <FaChevronRight className="text-gray-500" /> {/* Chevron icon */}
+                        </li>
+                    ))}
                 </ul>
             </div>
 
             {/* Right-side Display */}
-            <div className="w-3/4 bg-gray-200 p-4 h-full overflow-y-auto"> {/* Set height to full and enable scrolling */}
+            <div className="w-3/4 bg-gray-200 p-4 h-full overflow-y-auto">
                 {selectedMenu === 'Models' && (
                     <div>
                         {carModels.map((car) => (
                             <div
                                 key={car.name}
-                                className="flex items-center mb-6 text-neutral-700 transition-all hover:border hover:border-white hover:shadow-lg rounded-lg p-6 hover:bg-white"
+                                className="flex items-center mb-6 text-neutral-700 transition-all hover:border-white rounded-lg p-6 hover:bg-white h-40" // เปลี่ยน h-40 ตามความสูงที่ต้องการ
                             >
-                                <img 
-                                    src={car.imageUrl} 
-                                    alt={car.name} 
-                                    className="w-32 h-auto mr-4 transition-transform duration-300 hover:translate-x-2" 
+                                <img
+                                    src={car.imageUrl}
+                                    alt={car.name}
+                                    className="w-60 h-auto mr-4 transition-transform duration-300 hover:translate-x-2" // Image hover effect
                                 />
                                 <div>
-                                    <h3 className="text-xl font-bold text-neutral-700 ">{car.name}</h3>
+                                    <h3 className="text-2xl font-bold text-neutral-700">{car.name}</h3>
                                     <div className="flex space-x-2">
                                         {car.fuel.map((fuelType) => (
-                                            <span key={fuelType} className="px-2 py-1 bg-gray-200 rounded">
+                                            <span key={fuelType} className="px-3 py-1 rounded text-lg bg-gray-300">
                                                 {fuelType}
                                             </span>
                                         ))}
                                     </div>
                                 </div>
                             </div>
+
                         ))}
                     </div>
                 )}
@@ -76,10 +86,6 @@ function CarMenu() {
 
                 {selectedMenu === 'Find a Dealer' && (
                     <div className="text-xl">ค้นหาตัวแทนจำหน่าย</div>
-                )}
-
-                {!selectedMenu && (
-                    <div className="text-gray-500">Please select a menu from the left.</div>
                 )}
             </div>
         </div>
