@@ -1,9 +1,9 @@
 "use client";
-import { useEffect, useState } from 'react';
-import { checkAuthState } from '../Auth';
-import AuthDialog from '../pages/AuthDialog';
-import TodoItem from '../pages/model';
-import CarMenu from '../pages/CarMenu'; // Import CarMenu here
+import { useEffect, useState } from "react";
+import { checkAuthState } from "../Auth";
+import AuthDialog from "../pages/AuthDialog";
+import TodoItem from "../pages/model";
+import CarMenu from "../pages/CarMenu"; // Import CarMenu here
 
 export default function Home() {
   const [user, setUser] = useState(null);
@@ -15,7 +15,7 @@ export default function Home() {
     "https://images-porsche.imgix.net/-/media/E969499404154DB79BAD58EF5CC8CFAB_82BBE0A2462E47C4B1DB34EA0B23B853_CZ25W12IX0010-911-carrera-gts-side?w=1400&q=85&crop=faces%2Centropy%2Cedges&auto=format",
     "https://images-porsche.imgix.net/-/media/5EE5F56AEC67493EB1AA87EAB2721DC0_DDCBAE39F81644E4AAA7B2CA3222DC2E_PA24P5KIX0005-panamera-turbo-e-hybrid-model-intro?w=2560&h=697&q=85&crop=faces%2Centropy%2Cedges&auto=format",
     "https://images-porsche.imgix.net/-/media/E369499404154DB79BAD58EF5CC8CFAB_82BBE0A2462E47C4B1DB34EA0B23B853_CZ25W12IX0010-911-targa-side?w=1400&q=85&crop=faces%2Centropy%2Cedges&auto=format",
-    "https://example.com/path/to/your/new-car-image.jpg" // Add a new car image URL here
+    "https://example.com/path/to/your/new-car-image.jpg", // Add a new car image URL here
   ];
 
   useEffect(() => {
@@ -35,7 +35,7 @@ export default function Home() {
   };
 
   const handlePreviousImage = () => {
-    setCurrentImageIndex((prevIndex) => 
+    setCurrentImageIndex((prevIndex) =>
       (prevIndex - 1 + carImages.length) % carImages.length
     );
   };
@@ -57,20 +57,21 @@ export default function Home() {
       {/* Header */}
       <header className="bg-white shadow-md sticky top-0 z-50">
         <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="text-2xl font-extrabold text-blue-600 tracking-wide">PORSCHE</div>
+          <div className="text-2xl font-extrabold text-blue-600 tracking-wide">
+            PORSCHE
+          </div>
           <div className="flex items-center">
-            <button 
-              onClick={toggleMenu} 
+            <button
+              onClick={toggleMenu}
               className="text-lg font-medium text-gray-600 hover:text-blue-600 transition duration-300 mr-6"
             >
               Menu
             </button>
-            
-              <AuthDialog 
-                onLogin={setUser} 
-                customClass="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full transition duration-300" 
-              />
-            
+
+            <AuthDialog
+              onLogin={setUser}
+              customClass="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full transition duration-300"
+            />
           </div>
         </nav>
       </header>
@@ -83,16 +84,17 @@ export default function Home() {
             style={{ transition: "all 0.3s ease" }}
           >
             <div
-              className="w-1/2 bg-white p-6 shadow-lg h-full"
+              className="w-1/2 bg-white  shadow-lg h-full"
               style={{ right: menuVisible ? "0" : "-50%", transition: "right 0.3s ease" }}
             >
+              {/* ปุ่ม X */}
               <button
                 onClick={toggleMenu}
-                className="text-right text-gray-700 font-bold text-xl mb-2"
+                className="absolute top-2 right-[52%] text-white font-bold text-xl mb-2 hover:text-gray-400 transition-colors duration-300"
               >
                 X
               </button>
-              <h3 className="font-bold text-lg mb-4">Car Menu</h3>
+
               <CarMenu />
             </div>
           </aside>
@@ -101,9 +103,9 @@ export default function Home() {
         {/* Main Section */}
         <main className="flex-grow">
           <section className="relative">
-            <div 
+            <div
               className="relative w-full h-[70vh] bg-cover bg-center"
-              style={{ 
+              style={{
                 backgroundImage: `url(${carImages[currentImageIndex]})`,
                 backgroundSize: "contain",
                 backgroundRepeat: "no-repeat",
@@ -117,16 +119,16 @@ export default function Home() {
               </div>
               {/* Left and Right Navigation Buttons */}
               <div className="absolute inset-y-0 left-4 flex items-center">
-                <button 
-                  onClick={handlePreviousImage} 
+                <button
+                  onClick={handlePreviousImage}
                   className="bg-white bg-opacity-70 hover:bg-opacity-100 transition-all text-gray-800 p-3 rounded-full shadow-lg"
                 >
                   {"<"}
                 </button>
               </div>
               <div className="absolute inset-y-0 right-4 flex items-center">
-                <button 
-                  onClick={handleNextImage} 
+                <button
+                  onClick={handleNextImage}
                   className="bg-white bg-opacity-70 hover:bg-opacity-100 transition-all text-gray-800 p-3 rounded-full shadow-lg"
                 >
                   {">"}
@@ -137,13 +139,19 @@ export default function Home() {
 
           {/* Task Section */}
           <section className="container mx-auto px-6 py-12 text-center">
-            <h2 className="text-4xl font-bold mb-6 text-gray-800">Manage Your Tasks with Ease</h2>
-            <p className="text-lg text-gray-600 mb-10">Stay organized, focused, and in control</p>
+            <h2 className="text-4xl font-bold mb-6 text-gray-800">
+              Manage Your Tasks with Ease
+            </h2>
+            <p className="text-lg text-gray-600 mb-10">
+              Stay organized, focused, and in control
+            </p>
             {user ? (
               <TodoItem user={user} />
             ) : (
               <div>
-                <p className="text-lg text-gray-600">Please sign in to manage your tasks.</p>
+                <p className="text-lg text-gray-600">
+                  Please sign in to manage your tasks.
+                </p>
               </div>
             )}
           </section>
