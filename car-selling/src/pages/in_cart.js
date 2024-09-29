@@ -13,7 +13,6 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const db = getDatabase(app);
 
 export default function InCart({ cartItems, setCartVisible, user }) {
-
     // Update quantity in cart
     const increaseQuantity = (id, quantity) => {
         update(ref(db, `users/${user.uid}/cart/${id}`), { quantity: quantity + 1 });
@@ -23,8 +22,12 @@ export default function InCart({ cartItems, setCartVisible, user }) {
         if (quantity > 1) {
             update(ref(db, `users/${user.uid}/cart/${id}`), { quantity: quantity - 1 });
         } else {
-            remove(ref(db, `users/${user.uid}/cart/${id}`));
+            removeItemFromCart(id);
         }
+    };
+
+    const removeItemFromCart = (id) => {
+        remove(ref(db, `users/${user.uid}/cart/${id}`));
     };
 
     // Calculate total price
@@ -57,7 +60,7 @@ export default function InCart({ cartItems, setCartVisible, user }) {
                                 <FontAwesomeIcon icon={faPlus} />
                             </button>
                             <button 
-                                onClick={() => remove(ref(db, `users/${user.uid}/cart/${item.id}`))} 
+                                onClick={() => removeItemFromCart(item.id)} 
                                 className="bg-red-500 hover:bg-red-600 text-white p-2 rounded ml-2 transition duration-300"
                             >
                                 <FontAwesomeIcon icon={faTrash} />
