@@ -5,9 +5,16 @@ import { faPlus, faMinus, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 // Firebase configuration
 const firebaseConfig = {
-    // Your Firebase config here
-};
-
+    apiKey: "AIzaSyCKZXycWiCL3lveCVMcjcL1KWbLIJggzBA",
+    authDomain: "react-50919.firebaseapp.com",
+    databaseURL: "https://react-50919-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "react-50919",
+    storageBucket: "react-50919.appspot.com",
+    messagingSenderId: "118926940338",
+    appId: "1:118926940338:web:a4ffda2fb078c7e75d11ab",
+    measurementId: "G-P9H0VPKFD7"
+    };
+    
 // Initialize Firebase (Check if an app already exists)
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const db = getDatabase(app);
@@ -15,19 +22,22 @@ const db = getDatabase(app);
 export default function InCart({ cartItems, setCartVisible, user }) {
     // Update quantity in cart
     const increaseQuantity = (id, quantity) => {
-        update(ref(db, `users/${user.uid}/cart/${id}`), { quantity: quantity + 1 });
+        update(ref(db, `users/${user.uid}/cart/${id}`), { quantity: quantity + 1 })
+            .catch((error) => console.error("Error updating quantity:", error));
     };
 
     const decreaseQuantity = (id, quantity) => {
         if (quantity > 1) {
-            update(ref(db, `users/${user.uid}/cart/${id}`), { quantity: quantity - 1 });
+            update(ref(db, `users/${user.uid}/cart/${id}`), { quantity: quantity - 1 })
+                .catch((error) => console.error("Error updating quantity:", error));
         } else {
             removeItemFromCart(id);
         }
     };
 
     const removeItemFromCart = (id) => {
-        remove(ref(db, `users/${user.uid}/cart/${id}`));
+        remove(ref(db, `users/${user.uid}/cart/${id}`))
+            .catch((error) => console.error("Error removing item:", error));
     };
 
     // Calculate total price
@@ -69,7 +79,7 @@ export default function InCart({ cartItems, setCartVisible, user }) {
                     </div>
                 ))
             ) : (
-                <p className="text-center text-gray-600">No cars in the cart</p>
+                <p className="text-center text-gray-600">No items in the cart</p>
             )}
             {cartItems.length > 0 && (
                 <div className="bg-white rounded-lg shadow-md p-4 text-right">
