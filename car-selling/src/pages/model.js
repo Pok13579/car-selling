@@ -1,158 +1,141 @@
-import React, { useEffect, useState } from 'react';
-import { db } from '../firebase'; // Import Firebase configuration
+import { useEffect, useState } from 'react';
+import { db } from '../firebase';
 import { ref, push, onValue, remove, update } from 'firebase/database';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faEdit, faTrash, faSave, faMinus, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
-const App = ({ user }) => {
-    const [cars, setCars] = useState([]);
-    const [newCarName, setNewCarName] = useState('');
-    const [newCarPrice, setNewCarPrice] = useState('');
-    const [newCarImageUrl, setNewCarImageUrl] = useState('');
-    const [editingCarId, setEditingCarId] = useState(null);
-    const [error, setError] = useState('');
+export default function CartItem({ user }) {
+    const [carModels, setCarModels] = useState([]);
+    const [cartItems, setCartItems] = useState([]);
+    const [cartVisible, setCartVisible] = useState(false);
 
-    const addOrUpdateCar = (e) => {
-        e.preventDefault();
-        setError('');
-
-        if (!newCarName || !newCarPrice || !newCarImageUrl) {
-            setError('All fields are required!');
-            return;
-        }
-
-        if (isNaN(newCarPrice)) {
-            setError('Price must be a number!');
-            return;
-        }
-
-        const carData = {
-            name: newCarName,
-            price: newCarPrice,
-            imageUrl: newCarImageUrl
-        };
-
-        if (editingCarId) {
-            update(ref(db, `users/${user.uid}/cars/${editingCarId}`), carData)
-                .then(() => {
-                    resetForm();
-                })
-                .catch((error) => {
-                    setError('Error updating car: ' + error.message);
-                });
-        } else {
-            const carKey = push(ref(db, `users/${user.uid}/cars`)).key;
-            update(ref(db, `users/${user.uid}`), {
-                [`cars/${carKey}`]: carData
-            }).then(() => {
-                resetForm();
-            }).catch((error) => {
-                setError('Error adding car: ' + error.message);
-            });
-        }
-    };
-
-    const resetForm = () => {
-        setNewCarName('');
-        setNewCarPrice('');
-        setNewCarImageUrl('');
-        setEditingCarId(null);
-    };
-
+    // Fetch car models
     useEffect(() => {
-        const userRef = ref(db, `users/${user.uid}`);
-        const unsubscribe = onValue(userRef, (snapshot) => {
+        const fetchCarModels = async () => {
+            const models = [
+                { id: '1', name: 'Car 1', price: 20000, imageUrl: 'car1.jpg' },
+                { id: '2', name: 'Car 2', price: 25000, imageUrl: 'car2.jpg' },
+            ];
+            setCarModels(models);
+        };
+        fetchCarModels();
+    }, []);
+
+    // Fetch user's cart
+    useEffect(() => {
+        const cartRef = ref(db, `users/${user.uid}/cart`);
+        const unsubscribe = onValue(cartRef, (snapshot) => {
             const data = snapshot.val();
-            if (data && data.cars) {
-                const carList = Object.entries(data.cars).map(([id, car]) => ({
-                    id,
-                    ...car
-                }));
-                setCars(carList);
+            if (data) {
+                const cartList = Object.entries(data).map(([id, item]) => ({ id, ...item }));
+                setCartItems(cartList);
             } else {
-                setCars([]);
+                setCartItems([]);
             }
         });
         return () => unsubscribe();
     }, [user.uid]);
 
-    const deleteCar = (id) => {
-        remove(ref(db, `users/${user.uid}/cars/${id}`)).catch((error) => {
-            setError('Error deleting car: ' + error.message);
-        });
+    // Add car to cart
+    const addToCart = (car) => {
+        push(ref(db, `users/${user.uid}/cart`), { name: car.name, price: car.price, quantity: 1 });
     };
 
-    const editCar = (car) => {
-        setNewCarName(car.name);
-        setNewCarPrice(car.price);
-        setNewCarImageUrl(car.imageUrl);
-        setEditingCarId(car.id);
+    // Update quantity in cart
+    const increaseQuantity = (id, quantity) => {
+        update(ref(db, `users/${user.uid}/cart/${id}`), { quantity: quantity + 1 });
+    };
+
+    const decreaseQuantity = (id, quantity) => {
+        if (quantity > 1) {
+            update(ref(db, `users/${user.uid}/cart/${id}`), { quantity: quantity - 1 });
+        } else {
+            remove(ref(db, `users/${user.uid}/cart/${id}`));
+        }
+    };
+
+    // Calculate total price
+    const calculateTotal = () => {
+        return cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
+    };
+
+    // Toggle cart visibility
+    const toggleCartVisibility = () => {
+        setCartVisible(!cartVisible);
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-300 p-5">
-            <h2 className="text-5xl font-extrabold text-center mb-6 text-gray-900 font-serif">
-                Add Your Dream Car
-            </h2>
-            {error && <p className="text-red-500">{error}</p>}
+        <div className="container mx-auto py-8">
+            <h2 className="text-3xl font-bold text-center mb-6">Available Cars</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                {carModels.map((car) => (
+                    <div key={car.id} className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105">
+                        <img src={car.imageUrl} alt={car.name} className="w-full h-48 object-cover" />
+                        <div className="p-4 text-center">
+                            <h3 className="text-xl font-semibold text-gray-800">{car.name}</h3>
+                            <p className="text-gray-600 mb-3">${car.price}</p>
+                            <button 
+                                onClick={() => addToCart(car)} 
+                                className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition duration-300 w-full"
+                            >
+                                <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                ))}
+            </div>
 
-            <form onSubmit={addOrUpdateCar} className="mb-6 flex space-x-4">
-                <input
-                    type="text"
-                    value={newCarName}
-                    onChange={(e) => setNewCarName(e.target.value)}
-                    placeholder="Car Name"
-                    className="p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    value={newCarPrice}
-                    onChange={(e) => setNewCarPrice(e.target.value)}
-                    placeholder="Car Price"
-                    className="p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <input
-                    type="text"
-                    value={newCarImageUrl}
-                    onChange={(e) => setNewCarImageUrl(e.target.value)}
-                    placeholder="Image URL"
-                    className="p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <button
-                    type="submit"
-                    className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded transition duration-300 flex items-center"
-                >
-                    <FontAwesomeIcon icon={faPlus} className="mr-2" />
-                    {editingCarId ? 'Update Car' : 'Add Car'}
+            <div className="text-center mt-8">
+                <button onClick={toggleCartVisibility} className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg transition duration-300 flex items-center mx-auto">
+                    <FontAwesomeIcon icon={faShoppingCart} className="mr-2" />
+                    View Cart ({cartItems.length})
                 </button>
-            </form>
+            </div>
 
-            {/* Displaying Cars in a Grid Layout */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-6xl">
-                {cars.length > 0 ? (
-                    cars.map((car) => (
-                        <div key={car.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
-                            <img src={car.imageUrl} alt={car.name} className="w-full h-48 object-cover" />
-                            <div className="p-4 relative">
-                                <h3 className="text-lg font-bold text-gray-800">{car.name}</h3>
-                                <p className="text-md font-bold text-gray-600">${car.price}</p>
-                                <div className="mt-4 flex justify-end space-x-2">
-                                    <button onClick={() => editCar(car)} className="bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded transition duration-300">
-                                        <FontAwesomeIcon icon={faEdit} />
+            {cartVisible && (
+                <div className="space-y-4 mt-6">
+                    <h2 className="text-3xl font-bold text-center mb-6">Your Cart</h2>
+                    {cartItems.length > 0 ? (
+                        cartItems.map((item) => (
+                            <div key={item.id} className="bg-white rounded-lg shadow-md p-4 flex items-center justify-between">
+                                <div className="flex-grow">
+                                    <span className="text-gray-800">{item.name}</span>
+                                    <div className="text-gray-600">Price: ${item.price}</div>
+                                </div>
+                                <div className="flex items-center">
+                                    <button 
+                                        onClick={() => decreaseQuantity(item.id, item.quantity)} 
+                                        className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-l transition duration-300"
+                                    >
+                                        <FontAwesomeIcon icon={faMinus} />
                                     </button>
-                                    <button onClick={() => deleteCar(car.id)} className="bg-red-500 hover:bg-red-600 text-white p-2 rounded transition duration-300">
+                                    <span className="text-lg mx-2">{item.quantity}</span>
+                                    <button 
+                                        onClick={() => increaseQuantity(item.id, item.quantity)} 
+                                        className="bg-green-600 hover:bg-green-700 text-white p-2 rounded-r transition duration-300"
+                                    >
+                                        <FontAwesomeIcon icon={faPlus} />
+                                    </button>
+                                    <button 
+                                        onClick={() => remove(ref(db, `users/${user.uid}/cart/${item.id}`))} 
+                                        className="bg-red-500 hover:bg-red-600 text-white p-2 rounded ml-2 transition duration-300"
+                                    >
                                         <FontAwesomeIcon icon={faTrash} />
                                     </button>
                                 </div>
                             </div>
+                        ))
+                    ) : (
+                        <p className="text-center text-gray-600">No cars in the cart</p>
+                    )}
+                    {cartItems.length > 0 && (
+                        <div className="bg-white rounded-lg shadow-md p-4 text-right">
+                            <h3 className="text-xl font-bold text-gray-800">Total: ${calculateTotal()}</h3>
                         </div>
-                    ))
-                ) : (
-                    <p className="text-center text-gray-600">No cars available</p>
-                )}
-            </div>
+                    )}
+                </div>
+            )}
         </div>
     );
-};
-
-export default App;
+}
