@@ -82,9 +82,9 @@ export default function Home() {
       {/* Header */}
       <header className="bg-white shadow-md sticky top-0 z-50">
         <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="text-2xl font-extrabold text-blue-600 tracking-wide">
-            PORSCHE
-          </div>
+        <div className="text-5xl font-bold text-black tracking-tight uppercase" style={{ fontFamily: 'sans-serif' }}>
+  PORSCHE
+</div>
           <div className="flex items-center">
             <button
               onClick={toggleMenu}
