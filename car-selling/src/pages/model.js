@@ -38,7 +38,15 @@ export default function CartItem({ user }) {
 
     // Add car to cart
     const addToCart = (car) => {
-        push(ref(db, `users/${user.uid}/cart`), { name: car.name, price: car.price, quantity: 1 });
+        const existingItem = cartItems.find(item => item.name === car.name);
+        
+        if (existingItem) {
+            // If item exists, increase its quantity
+            increaseQuantity(existingItem.id, existingItem.quantity);
+        } else {
+            // If item does not exist, add new item to cart
+            push(ref(db, `users/${user.uid}/cart`), { name: car.name, price: car.price, quantity: 1 });
+        }
     };
 
     // Update quantity in cart
