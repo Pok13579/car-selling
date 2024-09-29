@@ -200,7 +200,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="bg-blue-600 py-6">
         <div className="container mx-auto px-6 text-center">
-          <p className="text-white">© 2024 Lapatrada Chotirat. All rights reserved.</p>
+          <p className="text-white">© 2024 Lapatrada Chotirat And Taned Wongpoo. All rights reserved.</p>
         </div>
       </footer>
     </div>
